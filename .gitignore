@@ -16,3 +16,8 @@
 !/portable/display-mode.txt
 !/portable/Play Redline Racer.cmd
 !/portable/Redline Racer.exe.manifest
+!/screenshots/
+/screenshots/*
+!/screenshots/title.png
+!/screenshots/start-grid.png
+!/screenshots/cornering.png
