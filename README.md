@@ -1,2 +1,52 @@
-# Redline-Racer-win95towin11
-手元のRedline RacerのCDイメージから、Windows 11用のポータブル版を作る変換パッチ。
+# Redline Racer ポータブル変換パッチ
+
+手元の英語版『Redline Racer』のCDイメージから、Windows 11で起動できるゲームフォルダを作ります。ゲーム本体、コース、説明書、音源は利用者のディスクから取り出します。変換後はCDのマウント、ゲームのインストール、管理者権限は不要です。
+
+## 使い方
+
+1. [パッチをZIPでダウンロード](https://github.com/MASA-6cha/Redline-Racer-win95towin11/archive/refs/heads/main.zip)して、フォルダごと展開します。
+2. `Convert.exe` をダブルクリックし、対応する `.bin`、`.img` または同じフォルダの `.cue` を選択します。変換時に互換ライブラリを取得するため、インターネット接続が必要です。オフラインでの手順は下記を参照してください。
+3. イメージと同じ場所にできる `Redline Racer Win11` の中で、`Play Redline Racer.cmd` を起動します。出力先には書き込み可能な場所を使ってください。すでに同名フォルダがある場合は、コマンドラインで別の出力先を指定できます。
+
+**表示設定**はゲームを終了してから `Display Settings.exe` で変更します。初期値は「最大化ウィンドウ（ストレッチ）」です。最大化と全画面はそれぞれ4:3またはストレッチを選べます。固定倍率は1倍、1.5倍、2倍、3倍です。保存した設定は次の起動時に反映されます。
+
+**セーブの引っ越し**は、ゲーム終了後に生成済みのゲームフォルダ全体をコピーしてください。プレイヤー設定は `menudata.ini`、進行や記録には `misc/database.ddb` と `tracks/*.loc` を使います。新しく変換したフォルダはディスク収録時の初期データで始まります。
+
+## 対応イメージ
+
+| 項目 | 確認済みの形式 |
+| --- | --- |
+| 対象 | 英語版PC用CD、単一ファイル、データ1トラック＋CD音源5トラック |
+| セクター | 2,352バイト、先頭トラックは MODE1/2352 |
+| ファイルサイズ | 674,939,328バイト |
+| イメージ全体のSHA-256 | `2318536199430db26cedc32f7019b75b42abcd4af221521e7e85149a2c7fa684` |
+
+このSHA-256と一致するイメージに対応します。拡張子がIMGでも内容が同じなら変換できます。データトラックのみのISOには5曲の音源が含まれません。他のプレス、他言語版、複数BINに分割したイメージは未対応です。
+
+## 変換内容
+
+- ディスクからゲームファイルとDirectPlayを展開し、5曲を44.1 kHz・16ビットのステレオWAVとして `Music` に保存します。
+- 対象の `rlr_3dfx.exe` をSHA-256で照合し、56バイトの変更をコピーに適用します。生成する `Redline Racer.exe` のSHA-256は `1cecaffe165f82705f3b9a4ee3ad3ab5e086c9381b7667d31cdb31b55d798629` です。
+- ゲームデータをフォルダ内から読み込みます。コントローラーのメニュー決定は1番ボタンの押し直しで受け付けます。ライダーのモデルを表示距離内で維持し、描画距離の初期値を100にします。
+- Glide描画、レース効果音、CD音源再生用の互換ライブラリを公式リリースから取得し、ZIPのSHA-256を照合してから展開します。変換後はオフラインでプレイできます。
+
+## コマンドラインとオフライン変換
+
+引数は順に、入力イメージ、新規出力フォルダ、公式ZIPの保存フォルダです。出力先とZIPフォルダは省略できます。
+
+```powershell
+.\Convert.exe "D:\Discs\Redline Racer.img" "D:\Games\Redline Racer Win11"
+.\Convert.exe "D:\Discs\Redline Racer.cue" "D:\Games\Redline Racer Win11" "D:\OfflinePackages"
+```
+
+オフライン変換では、次の3ファイルを展開せずに指定フォルダか、`Convert.exe` の隣の `packages` フォルダに置きます。
+
+| 用途 | バージョンと公式ZIP |
+| --- | --- |
+| Glide描画 | [dgVoodoo 2.87.6](https://github.com/dege-diosg/dgVoodoo2/releases/download/2.87.6/dgVoodoo2_87_6.zip) |
+| CD音源 | [Direct-WinMM 2.3.1 x86](https://github.com/Jione/Direct-WinMM/releases/download/v2.3.1/DirectWinMM-x86-v2.3.1.zip) |
+| 効果音 | [reAL 2.0.0](https://github.com/PlayNeth/reAL/releases/download/2.0.0/reAL-2.0.0.zip) |
+
+## ソースからビルド
+
+Windows 11で `build.cmd` を実行すると、.NET FrameworkのC#コンパイラで `Convert.exe` と `portable/Display Settings.exe` を再生成します。入力検証とゲームの差分は `src/Converter.cs`、ディスクの展開は `src/Disc.cs`、互換ライブラリの配布URLとハッシュは `src/Packages.cs` にあります。

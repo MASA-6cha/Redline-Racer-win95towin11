@@ -1,0 +1,18 @@
+# Only public patch components belong in this repository.
+/*
+!/.gitignore
+!/README.md
+!/Convert.exe
+!/build.cmd
+!/src/
+!/portable/
+/src/*
+!/src/Converter.cs
+!/src/Disc.cs
+!/src/Packages.cs
+!/src/RacerDisplay.cs
+/portable/*
+!/portable/Display Settings.exe
+!/portable/display-mode.txt
+!/portable/Play Redline Racer.cmd
+!/portable/Redline Racer.exe.manifest
