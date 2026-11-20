@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+  <assemblyIdentity type="win32" name="RedlineRacer.Portable" version="1.0.0.0" processorArchitecture="x86"/>
+  <file name="dplayx.dll">
+    <comClass clsid="{D1EB6D20-8923-11D0-9D97-00A0C90A43CB}" threadingModel="Both"/>
+  </file>
+  <application xmlns="urn:schemas-microsoft-com:asm.v3">
+    <windowsSettings><dpiAware xmlns="http://schemas.microsoft.com/SMI/2005/WindowsSettings">true</dpiAware></windowsSettings>
+  </application>
+</assembly>
